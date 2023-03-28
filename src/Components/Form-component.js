@@ -4,20 +4,16 @@ import axios from "axios";
 
 export const FormComponent = () => {
   const [userInput, setUserInput] = useState("");
-  let [data, setData] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:3005/api/notes")
-      .then((response) => {
-        setData(response.data);
+      .then((res) => {
+        setData(res.data);
       })
       .catch(console.log);
-  }, [data]);
-
-  const changeHandler = (e) => {
-    setUserInput(e.target.value);
-  };
+  }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -25,18 +21,21 @@ export const FormComponent = () => {
       alert("Please add a note first!");
       return;
     }
-    axios.post("http://localhost:3005/api/notes", {
-      content: userInput,
-    });
-    data = data.concat(userInput);
-    setUserInput("");
+    axios
+      .post("http://localhost:3005/api/notes", { content: userInput })
+      .then((res) => {
+        console.log(res.data);
+        setData(data.concat(res.data));
+        setUserInput("");
+      })
+      .catch(console.log);
   };
 
   const clickHandlerDelete = (id) => {
-    axios.delete(`http://localhost:3005/api/notes/${id}`).then((response) => {
-      console.log(response.data);
-      data = data.filter((item) => item.id !== id);
-      setData(data);
+    axios.delete(`http://localhost:3005/api/notes/${id}`).then((res) => {
+      console.log(res.data);
+      const newData = data.filter((item) => item.id !== id);
+      setData(newData);
     });
   };
 
@@ -48,7 +47,7 @@ export const FormComponent = () => {
           type="text"
           placeholder="Add a note"
           value={userInput}
-          onChange={changeHandler}
+          onChange={(e) => setUserInput(e.target.value)}
         />
         <button>Submit</button>
       </form>

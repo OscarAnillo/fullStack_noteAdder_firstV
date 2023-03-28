@@ -6,3 +6,18 @@
 .App {
   text-align: center;
 }
+.map-div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  margin: 1em auto;
+  width: 60%
+}
+
+.map-div button {
+  background-color: transparent;
+  border: none;
+  color: red;
+  cursor: pointer
+}
